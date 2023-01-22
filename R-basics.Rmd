@@ -1,0 +1,87 @@
+---
+title: "Intro to R and R Markdown"
+author: "Brendan Allen"
+date: "2023-01-18"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+source("setup.R")
+```
+
+
+```{r}
+data("penguins")
+class(penguins)
+#str(penguins)
+typeof(penguins$year)
+```
+
+```{r}
+myList <- list("apple", 1993, FALSE, penguins)
+#str(myList)
+#list(myList, list("stuff", list("and more stuff")))
+
+#myList[[length(myList)]] #penguins tibble 
+names(myList) <- c("fruit", "year", "logic", "data")
+
+penguins[1:5, c("species","sex", "flipper_length_mm")]
+penguins[penguins$flipper_length_mm > 200,]
+```
+6.3.1 Exercises
+```{r}
+myList$fruit
+penguins$flipper_length_mm
+penguins[penguins$island=='Dream',]
+
+a <- unique(penguins$species)#; a
+b <- unique(penguins$island)#; b
+cats <- penguins[1:lengths(penguins), c("species","island","flipper_length_mm")]
+meow <- subset(cats, island=="Dream")#3; meow
+d <- meow[meow$species=="Adelie",]
+print(mean(d$flipper_length_mm, na.rm=TRUE))
+```
+2. 3, Torgersen, Biscoe, Dream
+4. 189.7321 mm
+6.3.2
+```{r}
+filter(penguins, species == "Adelie")
+filter(penguins, species != "Adelie")
+filter(penguins, island %in% c("Dream", "Torgersen") & !is.na(bill_length_mm))
+
+select(penguins, species, sex)
+select(penguins, species:flipper_length_mm)
+select(penguins, genus = species, island)
+select(penguins, contains("mm"))
+
+mutate(penguins, bill_length_cm = bill_length_mm / 10)
+mutate(penguins, species_sex = if_else(sex == 'male', paste0(species, "_m"), paste0(species, "_f")))
+
+penguins %>%
+  group_by(species)
+  summarise(body_mass_avg = mean(body_mass_g, na.rm = TRUE))
+  
+penguins %>%
+  group_by(species, year) %>%
+  summarize(n_observation = n())
+
+```
+
+6.3.2 Exercises 
+```{r}
+relocate(penguins, year, 1)
+
+penguins %>%
+  mutate(penguins, size_group = )
+
+
+```
+7. Visualize
+
+```{r}
+
+```
+
+
