@@ -71,14 +71,18 @@ penguins %>%
 
 6.3.2 Exercises 
 ```{r}
+#1
 relocate(penguins, year, 1)
-
+#2
+psize <- mean(penguins$body_mass_g, na.rm = TRUE); psize
 penguins %>%
-  mutate(penguins, size_group = )
-
+  select(everything()) %>%
+    group_by(body_mass_g) %>%
+      mutate(body_mass_g, size_group = if_else(body_mass_g > psize, "large","small"))
+#3
 
 ```
-7. Visualize
+7. Visualize    
 
 ```{r}
 
