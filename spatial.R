@@ -25,16 +25,12 @@ poudre_points_prj <- st_transform(poudre_points_sf, st_crs(counties))
 #do they they match, yes
 st_crs(poudre_points_prj) == st_crs(counties)
 
-####crap
+
 poudre_hwy <- road %>%
-  flter(FULLNAME == "Poudre Canyon Hwy")
+  dplyr::filter(FULLNAME == "Poudre Canyon Hwy")
 
 road %>%
   filter(grepl('Poudre',.$FULLNAME))
-
-
-
-
 ####raster data
 elevation <- get_elev_raster(counties, z = 7)
 qtm(elevation)
@@ -50,9 +46,9 @@ elevation_crop <- crop(elevation, ext(road))
 tm_shape(elevation_crop)+
   tm_raster(style = "cont")
 
-tm_shape(elevation, bbox = st_bbox(poudre_points_prj))+
+tm_shape(elevation, bbox = st_bbox(poudre_hwy))+
   tm_raster(style = "cont", title = "Elevation (m)")+
-  tm_shape(poudre_points_prj)+
+  tm_shape(poudre_hwy)+
   tm_lines()+
   tm_shape(poudre_points_prj)+
   tm_dots(size = 0.2)
@@ -77,11 +73,14 @@ save(counties, road, file = "data/spatial_objects.RData")
 
 # 4. Exercises
 # Filter out the counties data set to only include Larimer, Denver, and Pueblo counties.
-# 
+counties <- county_subdivisions(state = "CO", county = c("Larimer", "Denver","Pueblo"))
 # Make a map of the counties data colored by county area. Make a second map of counties colored by their total area of water.
-# 
+tmap_mode("view")
+qtm(counties)+
+  tm_polygons(c("Larimer", "Denver","Pueblo"))
+      
 # Make a barplot comparing the elevation of your 3 points in the Poudre Canyon (note: explore the extract() function in the terra package).
-# 
+bplot <- extract(poudre_hwy, y = elevation)
 # Why are there 4 features in our Poudre Canyon Highway variable instead of 1?
-#   
+#     
   
